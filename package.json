@@ -1,0 +1,19 @@
+{
+  "name": "stream-monitor",
+  "version": "1.0.0",
+  "description": "Monitor HLS streamings (.m3u8 playlists), alerting the user when broadcasting starts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sqr/stream-monitor.git"
+  },
+  "author": "Arturo Bracero",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sqr/stream-monitor/issues"
+  },
+  "homepage": "https://github.com/sqr/stream-monitor#readme"
+}
