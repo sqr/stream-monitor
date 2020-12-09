@@ -4,7 +4,8 @@ const handlebars = require('express-handlebars');
 
 const app = express();
 
-const database = new Datastore({ filename: 'database.db', timestampData: true, autoload: true });
+const streamings = new Datastore({ filename: 'streamings.db', timestampData: true, autoload: true }); 
+const users = new Datastore({ filename: 'users.db', timestampData: true, autoload: true });
 
 app.set('view engine', 'hbs');
 app.engine('hbs', handlebars({
