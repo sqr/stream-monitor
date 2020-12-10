@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const users = new Datastore({ filename: 'users.db', timestampData: true, autoload: true });
 
 
-const hashPasswordAsync = async password => {
+const hashPasswordAsync = async (username, password) => {
 	const salt = await bcrypt.genSalt()
 	const hash = await bcrypt.hash(password, salt)
 	/*
@@ -13,9 +13,18 @@ const hashPasswordAsync = async password => {
 	 * you can store the password on the DB
 	 */
     console.log('the hash is :' + hash);
-    //users.insert({'username': 'square', 'password': hash});
+    users.insert({'username': username, 'password': hash}, function(err) {
+      if (err) {
+        console.log(err.message);
+      } else {
+        console.log('User added succesfully');
+      }
+    });
 }
 
+hashPasswordAsync('admin2', 'admin');
+
+/* 
 var hashedpw = hashPasswordAsync('123456')
 
 users.find({ _id: 'tpgZwSjvOjqsK1zK' }, function (err, docs) {
@@ -42,4 +51,4 @@ const isSame = async password => {
 
 isSame();
 
-
+ */
