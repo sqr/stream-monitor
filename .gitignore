@@ -127,3 +127,6 @@ dist
 
 # NeDB
 *.db
+
+# OSX
+.DS_Store

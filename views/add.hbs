@@ -1,0 +1,43 @@
+<h1>Add new stream</h1>
+<h2>Logged in as {{ name }}</h2>
+
+<form action="/add" method="POST">
+  <div>
+    <label for="name">Stream name</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div>
+    <label for="email">Stream URL</label>
+    <input type="url" id="stream_url" name="stream_url" required>
+  </div>
+  <div>
+    <label for="password">Website URL</label>
+    <input type="url" id="website_url" name="website_url" required>
+  </div>
+  <button type="submit">Add Stream</button>
+</form>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Stream URL</th>
+        <th>Website URL</th>
+        <th>Created by</th>
+        <th>Creation time</th>
+    </tr>
+    {{#each data}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.stream_url}}</td>
+            <td>{{this.website_url}}</td>
+            <td>{{this.created_by}}</td>
+            <td>{{formatTime this.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+        </tr>
+    {{/each}}
+</table>
+<br>
+<br>
+<br>
+<br>
+<form action="/logout?_method=DELETE" method="POST">
+    <button type="submit">Log Out</button>
+</form>
