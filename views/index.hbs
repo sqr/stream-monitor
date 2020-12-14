@@ -1,12 +1,39 @@
 <h1>Live streaming monitor</h1>
+<video controls id="video"></video>
 <div class="flex-container">
     {{#each data}}
         <div class="flex-item" id="{{this._id}}">
-            Stream: {{this.name}}
+            Stream: {{this.name}}<br>
+            <a href="{{this.stream_url}}" target="_blank">URL</a><br>
+            <a href="{{this.website_url}}" target="_blank">Play</a>
         </div>
     {{/each}}
     <div class="flex-item online">
         peine
     </div>
 
+    
 </div>
+<div>
+    <input id="online" type="button" value="online">
+    <input id="offline" type="button" value="offline">
+</div>
+<script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<video id="video"></video>
+<script>
+    if (Hls.isSupported()) {
+      var video = document.getElementById('video');
+      var hls = new Hls();
+      // bind them together
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        console.log("video and hls.js are now bound together !");
+        hls.loadSource("http://congresodirecto-f.akamaihd.net/i/congreso6_1@54665/master.m3u8");
+        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+        console.log("manifest loaded, found " + data.levels.length + " quality level");
+        });
+      });
+    video.play();
+
+    }
+  </script>

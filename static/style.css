@@ -14,11 +14,11 @@ h1 {
     width: 200px;
     height: 150px;
     margin: 5px;
-    line-height: 150px;
+    /* line-height: 150px; */
     color: white;
     font-weight: bold;
     font-size: 1em;
-    text-align: center;
+    text-align: left;
     border-radius: 15px;
     border: 3px solid rgb(134, 48, 33);
     order: 1;

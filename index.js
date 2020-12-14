@@ -10,10 +10,13 @@ const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override')
 const moment = require('moment')
-
+const db = require('./other')
 const app = express();
 
-const streamings = new Datastore2({ filename: 'streamings.db', timestampData: true, autoload: true }); 
+const streamings = db.streamings.streamings;
+const streamList = db.streamList;
+
+
 const users = new Datastore({ filename: 'users.db', timestampData: true, autoload: true });
 
 const initializePassport = require('./passport-config')
@@ -125,5 +128,11 @@ if (req.isAuthenticated()) {
     next()
 }
 
+app.get('/api', (req, res) => {
+    var dataToSend = { 'message': 'peine' };
+    const streamList = db.streamList;
+    var JSONdata = JSON.stringify(streamList);
+    res.send(streamList);
+});
 
 app.listen(4000, () => console.log('listening at port 4000'));
