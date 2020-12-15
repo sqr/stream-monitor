@@ -6,10 +6,25 @@
       <title>Stream Monitor</title>
       <meta name='viewport' content='width=device-width, initial-scale=1'>
       <link rel='stylesheet' type='text/css' media='screen' href='/static/style.css'>
+      <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
-  <body>
-    {{{ body }}}
+  <body id="body">
+    <div class="page-wrapper with-navbar with-navbar-fixed-bottom">
+      <nav class="navbar">
+        <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()">
+            <i class="fa fa-moon-o" aria-hidden="true"></i>
+            <span class="sr-only">Toggle dark mode</span>
+        </button>
+      </nav>
+      <div class="content-wrapper">
+        {{{ body }}}
+      </div>
+      <nav class="navbar navbar-fixed-bottom">
+      </nav>
+    </div>
   </body>
-  <script src="/static/index.js"></script> 
+  <script src="/static/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+  <script>document.getElementById("body").onload = halfmoon.toggleDarkMode()</script>
 </html>

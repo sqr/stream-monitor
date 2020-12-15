@@ -1,19 +1,23 @@
 <h1>Live streaming monitor</h1>
-<video controls id="video"></video>
-<div class="flex-container">
+<div class="video_wrapper">
+    <div class="video_player" id="video_player">
+        <video controls id="video"></video><span class="close">x</span>
+    </div>
+</div>
+    <div class="d-flex flex-row">
     {{#each data}}
-        <div class="flex-item" id="{{this._id}}">
+        <div class="card" id="{{this._id}}">
             Stream: {{this.name}}<br>
             <a href="{{this.stream_url}}" target="_blank">URL</a><br>
-            <a href="{{this.website_url}}" target="_blank">Play</a>
+            <a href="{{this.website_url}}" target="_blank">Website</a><br>
+            <button class="stream_button" id="{{this._id}}">Play Video</button>
         </div>
     {{/each}}
+    </div>
     <div class="flex-item online">
         peine
     </div>
 
-    
-</div>
 <div>
     <input id="online" type="button" value="online">
     <input id="offline" type="button" value="offline">
@@ -33,7 +37,21 @@
         console.log("manifest loaded, found " + data.levels.length + " quality level");
         });
       });
-    video.play();
+    }
 
+    var streamButtons = document.querySelectorAll('button[class=stream_button]');
+    var video_player = document.getElementById('video_player');
+
+    for (var i = 0; i < streamButtons.length; i++) {
+        streamButtons[i].addEventListener('click', function() {
+            if (video_player.style.display === "block") {
+                video_player.style.display = "none";
+                video.pause();
+
+            } else {
+                video_player.style.display = "block";
+                video.play();
+            }
+        });
     }
   </script>
