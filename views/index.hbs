@@ -1,21 +1,23 @@
 <h1>Live streaming monitor</h1>
-<div class="video_wrapper">
-    <div class="video_player" id="video_player">
-        <video controls id="video"></video><span class="close">x</span>
+<div class="video_wrapper" id="video_wrapper">
+    <div class="container-fluid">
+        <div class="row row-eq-spacing-sm justify-content-center m-0 p-0">
+            <div class="content" id="video_player">
+                <video controls id="video"></video>
+                <h2 class="content-title">Canal Parlamentario</h2>
+            </div>
+        </div>
     </div>
 </div>
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-wrap">
     {{#each data}}
-        <div class="card" id="{{this._id}}">
-            Stream: {{this.name}}<br>
-            <a href="{{this.stream_url}}" target="_blank">URL</a><br>
-            <a href="{{this.website_url}}" target="_blank">Website</a><br>
-            <button class="stream_button" id="{{this._id}}">Play Video</button>
+        <div class="card w-250" id="{{this._id}}">
+            <h2 class="card-title">{{this.name}}</h2>
+            <p><a href="{{this.stream_url}}" target="_blank">URL</a></p>
+            <p><a href="{{this.website_url}}" target="_blank">Website</a></p>
+            <button class="stream_button btn btn-primary" id="{{this._id}}">Play Video</button>
         </div>
     {{/each}}
-    </div>
-    <div class="flex-item online">
-        peine
     </div>
 
 <div>
@@ -23,7 +25,6 @@
     <input id="offline" type="button" value="offline">
 </div>
 <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<video id="video"></video>
 <script>
     if (Hls.isSupported()) {
       var video = document.getElementById('video');
@@ -39,8 +40,8 @@
       });
     }
 
-    var streamButtons = document.querySelectorAll('button[class=stream_button]');
-    var video_player = document.getElementById('video_player');
+    var streamButtons = document.querySelectorAll('button[class^=stream_button]');
+    var video_player = document.getElementById('video_wrapper');
 
     for (var i = 0; i < streamButtons.length; i++) {
         streamButtons[i].addEventListener('click', function() {
