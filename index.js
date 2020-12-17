@@ -8,9 +8,11 @@ const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const session = require('express-session');
 const passport = require('passport');
-const methodOverride = require('method-override')
-const moment = require('moment')
-const db = require('./other')
+const methodOverride = require('method-override');
+const moment = require('moment');
+const bodyParser = require('body-parser');
+const webPush = require('web-push');
+const db = require('./other');
 const app = express();
 
 const streamings = db.streamings.streamings;
@@ -47,8 +49,16 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(bodyParser.json())
 
+app.use('/static/sw', express.static('static/sw', {
+    setHeaders: function(res, path) {
+      res.set("Service-Worker-Allowed", "/");
+    }
+  }));
+  
 app.use('/static', express.static('static'));
+
 
 app.get('/', (req, res) => {
     streamings.find({}, function (err, docs) {
@@ -133,6 +143,25 @@ app.get('/api', (req, res) => {
     const streamList = db.streamList;
     var JSONdata = JSON.stringify(streamList);
     res.send(streamList);
+});
+
+// Push notification
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY
+
+webPush.setVapidDetails('mailto:test@example.com', publicVapidKey, privateVapidKey);
+
+app.post('/subscribe', (req, res) => {
+    const subscription = req.body
+
+    res.status(201).json({});
+
+    const payload = JSON.stringify({
+      title: 'Push notifications with Service Workers',
+    });
+
+    webPush.sendNotification(subscription, payload)
+      .catch(error => console.error(error));
 });
 
 app.listen(4000, () => console.log('listening at port 4000'));

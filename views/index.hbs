@@ -23,10 +23,10 @@
 <div>
     <input id="online" type="button" value="online">
     <input id="offline" type="button" value="offline">
+    <input class="push" type="button" value="Push">
 </div>
 <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
-
     var streamButtons = document.querySelectorAll('button[class^=stream_button]');
     var video_player = document.getElementById('video_wrapper');
     var video = document.getElementById('video');
@@ -53,4 +53,5 @@
             }
         });
     }
-  </script>
+
+</script>
