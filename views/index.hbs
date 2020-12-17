@@ -15,7 +15,7 @@
             <h2 class="card-title">{{this.name}}</h2>
             <p><a href="{{this.stream_url}}" target="_blank">URL</a></p>
             <p><a href="{{this.website_url}}" target="_blank">Website</a></p>
-            <button class="stream_button btn btn-primary" id="{{this._id}}">Play Video</button>
+            <button class="stream_button btn btn-primary" id="{{this._id}}" value="{{this.stream_url}}">Play Video</button>
         </div>
     {{/each}}
     </div>
@@ -26,30 +26,28 @@
 </div>
 <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
-    if (Hls.isSupported()) {
-      var video = document.getElementById('video');
-      var hls = new Hls();
-      // bind them together
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-        console.log("video and hls.js are now bound together !");
-        hls.loadSource("http://congresodirecto-f.akamaihd.net/i/congreso6_1@54665/master.m3u8");
-        hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-        console.log("manifest loaded, found " + data.levels.length + " quality level");
-        });
-      });
-    }
 
     var streamButtons = document.querySelectorAll('button[class^=stream_button]');
     var video_player = document.getElementById('video_wrapper');
+    var video = document.getElementById('video');
+    var hls = new Hls();
 
     for (var i = 0; i < streamButtons.length; i++) {
         streamButtons[i].addEventListener('click', function() {
-            if (video_player.style.display === "block") {
+            var url = this.value
+
+
+            if (video_player.style.display === "block" && Hls.isSupported()) {
                 video_player.style.display = "none";
                 video.pause();
+                hls.stopLoad()
+                hls.detachMedia(video);
 
             } else {
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+                    hls.loadSource(url);
+                });
                 video_player.style.display = "block";
                 video.play();
             }
