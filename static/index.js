@@ -7,6 +7,7 @@ async function fetchData() {
     };
     const response = await fetch('/api', options);
     const streamList = await response.json();
+    console.log(streamList)
     updateStyle(streamList.streamList);
 }
 
@@ -16,11 +17,12 @@ function updateStyle(streamList) {
         if (streamList[item].online) {
             streamID.classList.remove('offline');
             streamID.classList.add('online');
+            onlineNotification(streamList[item].name).catch(error => console.error(error));
         } else {
             streamID.classList.remove('online');
             streamID.classList.add('offline');
         }
-        console.log(streamList[item].id)
+        //console.log(streamList[item].id)
     }
 }
 
@@ -81,7 +83,10 @@ async function triggerPushNotification() {
 
     await fetch('/subscribe', {
         method: 'POST',
-        body: JSON.stringify(subscription),
+        body: JSON.stringify({
+            'subscription': subscription,
+            'name': 'pito'
+        }),
         headers: {
         'Content-Type': 'application/json',
         },
@@ -94,3 +99,29 @@ async function triggerPushNotification() {
 triggerPush.addEventListener('click', () => {
     triggerPushNotification().catch(error => console.error(error));
 });
+
+async function onlineNotification(name) {
+    if ('serviceWorker' in navigator) {
+    const register = await navigator.serviceWorker.register('/static/sw/sw.js', {
+        scope: '/'
+    });
+
+    const subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+    });
+
+    await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+            'subscription': subscription,
+            'name': name
+        }),
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    });
+    } else {
+    console.error('Service workers are not supported in this browser');
+    }
+}

@@ -4,7 +4,7 @@
         <div class="row row-eq-spacing-sm justify-content-center m-0 p-0">
             <div class="content" id="video_player">
                 <video controls id="video"></video>
-                <h2 class="content-title">Canal Parlamentario</h2>
+                <h2 class="content-title"></h2>
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
             <h2 class="card-title">{{this.name}}</h2>
             <p><a href="{{this.stream_url}}" target="_blank">URL</a></p>
             <p><a href="{{this.website_url}}" target="_blank">Website</a></p>
-            <button class="stream_button btn btn-primary" id="{{this._id}}" value="{{this.stream_url}}">Play Video</button>
+            <button class="stream_button btn btn-primary" id="{{this._id}}" data-name="{{this.name}}" value="{{this.stream_url}}">Play Video</button>
         </div>
     {{/each}}
     </div>
@@ -28,15 +28,17 @@
 <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
     var streamButtons = document.querySelectorAll('button[class^=stream_button]');
+    var h2_title = document.getElementsByClassName("content-title").item(0);
     var video_player = document.getElementById('video_wrapper');
     var video = document.getElementById('video');
     var hls = new Hls();
 
     for (var i = 0; i < streamButtons.length; i++) {
+
         streamButtons[i].addEventListener('click', function() {
             var url = this.value
-
-
+            var title = this.getAttribute("data-name");
+            console.log('name is: '+ title)
             if (video_player.style.display === "block" && Hls.isSupported()) {
                 video_player.style.display = "none";
                 video.pause();
@@ -44,6 +46,7 @@
                 hls.detachMedia(video);
 
             } else {
+                h2_title.innerHTML = title
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MEDIA_ATTACHED, function () {
                     hls.loadSource(url);

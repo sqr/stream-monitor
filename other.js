@@ -39,7 +39,7 @@ function data() {
 
   streamings.streamings.find({}, function (err, docs) {
     for (stream in docs) {
-      probe(docs[stream]._id, docs[stream].stream_url);
+      probe(docs[stream]._id, docs[stream].stream_url, docs[stream].name);
       /*doc = docs[stream]
       console.log('doc number ' + stream + ' is:')
       console.log(doc)
@@ -64,14 +64,14 @@ function data() {
 }
 setInterval(data, 30000);
 
-function probe(id, url){
+function probe(id, url, name){
   console.log('id is: ' + id)
   console.log('url is: ' + url)
   ffmpeg.ffprobe(url, function(err, metadata) {
     if (metadata) {
-      streamList.streamList.push({id: id, online: 1})
+      streamList.streamList.push({id: id, name: name, online: 1})
     } else {
-      streamList.streamList.push({id: id, online: 0})
+      streamList.streamList.push({id: id, name: name, online: 0})
     }
   })
 }

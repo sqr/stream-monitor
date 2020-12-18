@@ -56,7 +56,7 @@ app.use('/static/sw', express.static('static/sw', {
       res.set("Service-Worker-Allowed", "/");
     }
   }));
-  
+
 app.use('/static', express.static('static'));
 
 
@@ -152,12 +152,11 @@ const privateVapidKey = process.env.PRIVATE_VAPID_KEY
 webPush.setVapidDetails('mailto:test@example.com', publicVapidKey, privateVapidKey);
 
 app.post('/subscribe', (req, res) => {
-    const subscription = req.body
-
+    const subscription = req.body.subscription
     res.status(201).json({});
 
     const payload = JSON.stringify({
-      title: 'Push notifications with Service Workers',
+      title: req.body.name,
     });
 
     webPush.sendNotification(subscription, payload)
