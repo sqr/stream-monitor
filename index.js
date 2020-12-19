@@ -154,10 +154,10 @@ webPush.setVapidDetails('mailto:test@example.com', publicVapidKey, privateVapidK
 app.post('/subscribe', (req, res) => {
     const subscription = req.body.subscription
     res.status(201).json({});
-
+    console.log('status is:')
+    console.log(req.body.cuerpo)
     const payload = JSON.stringify({
       title: req.body.name,
-      body: req.body.status
     });
 
     webPush.sendNotification(subscription, payload)
