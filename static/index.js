@@ -7,9 +7,75 @@ async function fetchData() {
     };
     const response = await fetch('/api', options);
     const streamList = await response.json();
-    console.log(streamList)
+    //console.log(streamList)
+    recordStatus(streamList.streamList, activeStreams, inactiveStreams);
     updateStyle(streamList.streamList);
+    console.log('active streams are:')
+    console.log(activeStreams)
+    console.log('inactive streams are:')
+    console.log(inactiveStreams)
 }
+
+
+const activeStreams = []
+const inactiveStreams = []
+function recordStatus(streamList, activeStreams, inactiveStreams) {
+    if (activeStreams.length === 0) {
+        for (streams in streamList) {
+            if (streamList[streams].online) {
+                activeStreams.push(streamList[streams])
+                onlineNotification(streamList[streams].name).catch(error => console.error(error));
+            }
+        }
+    } else {
+        for (streams in streamList) {
+            var filtered = activeStreams.filter(a => a.id == streamList[streams].id);
+            if (filtered === false) {
+                activeStreams.push(streamList[streams])
+                onlineNotification(streamList[streams].name).catch(error => console.error(error));
+            }
+        }        
+    }
+
+    if (inactiveStreams.length === 0) {
+        for (streams in streamList) {
+            if (streamList[streams].online === 0) {
+                inactiveStreams.push(streamList[streams])
+                //offlineNotification(streamList[streams].name).catch(error => console.error(error));
+            }
+        }
+    } else {
+        for (streams in streamList) {
+            var filtered = inactiveStreams.filter(a => a.id == streamList[streams].id);
+            if (filtered === false) {
+                inactiveStreams.push(streamList[streams])
+                offlineNotification(streamList[streams].name).catch(error => console.error(error));
+            }
+        }        
+    }
+}
+
+
+
+// for (streams in streamList) {
+//     if(streamList[streams].online) {
+//         if (activeStreams.length === 0) {
+//             activeStreams.push(streamList[streams])
+//         } else {
+//             for(items in activeStreams) {
+//                 if (streamList[streams].id === activeStreams[items].id) {
+
+//                 } else {
+//                     activeStreams.push(streamList[streams])
+//                 }
+//             }
+//         } 
+        
+//     }else {
+//         console.log('all offline')
+//     }
+// } 
+
 
 function updateStyle(streamList) {
     for (item in streamList) {
@@ -17,7 +83,6 @@ function updateStyle(streamList) {
         if (streamList[item].online) {
             streamID.classList.remove('offline');
             streamID.classList.add('online');
-            onlineNotification(streamList[item].name).catch(error => console.error(error));
         } else {
             streamID.classList.remove('online');
             streamID.classList.add('offline');
@@ -115,7 +180,34 @@ async function onlineNotification(name) {
         method: 'POST',
         body: JSON.stringify({
             'subscription': subscription,
-            'name': name
+            'name': name,
+            'status': 'Stream is online'
+        }),
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    });
+    } else {
+    console.error('Service workers are not supported in this browser');
+    }
+}
+async function offlineNotification(name) {
+    if ('serviceWorker' in navigator) {
+    const register = await navigator.serviceWorker.register('/static/sw/sw.js', {
+        scope: '/'
+    });
+
+    const subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+    });
+
+    await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+            'subscription': subscription,
+            'name': name,
+            'status': 'Stream is offline'
         }),
         headers: {
         'Content-Type': 'application/json',
