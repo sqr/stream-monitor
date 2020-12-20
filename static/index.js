@@ -7,7 +7,7 @@ async function fetchData() {
     };
     const response = await fetch('/api', options);
     const streamList = await response.json();
-    updateStyle(streamList.streamList);
+    updateStyle(streamList);
 }
 
 function updateStyle(streamList) {
@@ -32,9 +32,6 @@ function updateStyle(streamList) {
     }
 }
 
-fetchData();
-setInterval(fetchData, 10000);
-
 // Local Notification implementation
 function notifyMe(title, status) {
     var options = {
@@ -55,6 +52,12 @@ function notifyMe(title, status) {
       });
     }
 }
+
+
+//////////////////////////////////////////////////
+///////     INACTIVE ZONE STARTS HERE      ///////
+//////////////////////////////////////////////////
+
 
 // Service Worker based notification implementation (INACTIVE)
 function urlBase64ToUint8Array(base64String) {

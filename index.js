@@ -62,7 +62,8 @@ app.use('/static', express.static('static'));
 
 app.get('/', (req, res) => {
     streamings.find({}, function (err, docs) {
-        res.render('index', { data : docs })
+        const sorted_docs = docs.sort((a, b) => a.name.localeCompare(b.name))
+        res.render('index', { data : sorted_docs })
     });
 });
 
@@ -84,9 +85,13 @@ app.post('/add', checkAuthenticated, (req, res) => {
     const website_url = req.body.website_url
     const created_by = req.session.passport.user
     streamings.insert({'name': name, 'stream_url': stream_url, 'website_url': website_url, 'created_by': created_by});
-    streamings.find({}, function (err, docs) {
-        res.render('add', { name: user_id, data : docs })
-    });
+    res.redirect('/add')
+});
+
+app.post('/delete', checkAuthenticated, (req, res) => {
+    const id = req.body.id
+    streamings.remove({'_id': id});
+    res.redirect('/add')
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -102,7 +107,7 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
 app.delete('/logout', (req, res) => {
     req.logOut()
     res.redirect('/login')
-  })
+})
 
 /* app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.hbs')
@@ -141,8 +146,9 @@ if (req.isAuthenticated()) {
 app.get('/api', (req, res) => {
     var dataToSend = { 'message': 'peine' };
     const streamList = db.streamList;
+    const sorted_streamList = streamList.streamList.sort((a, b) => a.name.localeCompare(b.name))
     var JSONdata = JSON.stringify(streamList);
-    res.send(streamList);
+    res.send(sorted_streamList);
 });
 
 // Push notification

@@ -28,6 +28,7 @@
           <th class="text-center">Website URL</th>
           <th class="text-center">Created by</th>
           <th class="text-center">Creation time</th>
+          <th class="text-center">Delete</th>
       </tr>
       {{#each data}}
           <tr>
@@ -36,11 +37,11 @@
               <td class="text-center"><a href={{this.website_url}}>Website</a></td>
               <td class="text-center">{{this.created_by}}</td>
               <td class="text-center">{{formatTime this.createdAt "DD-MM-YYYY HH:mm:ss"}}</td>
+              <td class="text-center"><form action="/delete" method="POST"><button class="btn btn-square" type="submit" name="id" value="{{this._id}}">&times;</button></form></td>
           </tr>
       {{/each}}
   </table>
 </div>
-
 <div class="container-md">
   <h3>Logged in as {{ name }}</h3>
   <form action="/logout?_method=DELETE" method="POST">
