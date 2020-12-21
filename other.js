@@ -68,14 +68,13 @@ function probe(id, url, name){
   console.log('id is: ' + id)
   console.log('url is: ' + url)
   ffmpeg.ffprobe(url, function(err, metadata) {
-    if (metadata) {
+    if (metadata && metadata.format.duration === 'N/A') {
       streamList.streamList.push({id: id, name: name, online: 1})
     } else {
       streamList.streamList.push({id: id, name: name, online: 0})
     }
   })
 }
-
 
 /* ffmpeg.ffprobe('http://congresodirecto-f.akamaihd.net/i/congreso6_1@54665/master.m3u8', function(err, metadata) {
   streamList.streamList.push(metadata);

@@ -62,8 +62,12 @@ app.use('/static', express.static('static'));
 
 app.get('/', (req, res) => {
     streamings.find({}, function (err, docs) {
+        if (docs.length === 0) {
+            res.render('empty')
+        } else {
         const sorted_docs = docs.sort((a, b) => a.name.localeCompare(b.name))
         res.render('index', { data : sorted_docs })
+        }
     });
 });
 
@@ -108,6 +112,10 @@ app.delete('/logout', (req, res) => {
     req.logOut()
     res.redirect('/login')
 })
+
+app.get('/empty', (req, res) => {
+    res.render('empty')
+});
 
 /* app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.hbs')
