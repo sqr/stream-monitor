@@ -38,7 +38,7 @@ Handlebars.registerHelper('formatTime', function (date, format) {
     var mmnt = moment(date);
     return mmnt.format(format);
 });
-
+ 
 app.use(express.urlencoded({ extended: true }))
 app.use(flash())
 app.use(session({
@@ -178,4 +178,4 @@ app.post('/subscribe', (req, res) => {
       .catch(error => console.error(error));
 });
 
-app.listen(4000, () => console.log('listening at port 4000'));
+app.listen(80, () => console.log('Listening on port 80'));
