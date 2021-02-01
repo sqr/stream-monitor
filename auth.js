@@ -22,7 +22,7 @@ const hashPasswordAsync = async (username, password) => {
     });
 }
 
-hashPasswordAsync('admin2', 'admin');
+hashPasswordAsync('user', 'password');
 
 /* 
 var hashedpw = hashPasswordAsync('123456')
